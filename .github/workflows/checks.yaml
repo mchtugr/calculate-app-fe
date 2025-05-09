@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: eu-north-1
-  ECR_REPOSITORY: my-ecr-repo
+  ECR_REPOSITORY: calculate-app
 
 jobs:
     checks:
