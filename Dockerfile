@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
+ENV REACT_APP_BASE_URL=http://calculate-app-backend-service:3000
 RUN npm run build
 
 # Production stage
