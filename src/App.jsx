@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+const baseUrl = process.env.REACT_APP_BASE_URL || 'http://localhost:3000';
+
 function App() {
   const [ numbers, setNumbers ] = useState({
     first: '',
@@ -34,7 +36,7 @@ function App() {
 
     const { first, second } = numbers
 
-    fetch('http://localhost:3000/add', {
+    fetch(baseUrl + '/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
