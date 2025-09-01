@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 
-const baseUrl = process.env.REACT_APP_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.REACT_APP_BASE_URL || 'http://calculate-app-backend-service:3000';
 
 function App() {
   const [ numbers, setNumbers ] = useState({
