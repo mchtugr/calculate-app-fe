@@ -3,7 +3,7 @@ name: Checks
 on:
   workflow_dispatch:  
   push:
-    branches: [test]
+    branches: [main]
 
 env:
   AWS_REGION: eu-north-1
