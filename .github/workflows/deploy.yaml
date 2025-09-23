@@ -32,8 +32,6 @@ on:
         type: string
         default: './helm/values-dev.yaml'  
     secrets:
-      GITHUB_TOKEN:
-        required: true
       AWS_ROLE_ARN:
         description: 'The AWS Role ARN to assume for deployment'
         required: true
