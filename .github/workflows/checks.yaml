@@ -70,6 +70,6 @@ jobs:
         chart-file-directory: "./helm"
         values-file: "./helm/values-dev.yaml"
       secrets:
-        AWS_ROLE_ARN: ${{ secrets.EKS_ROLE_ARN }}
+        EKS_ROLE_ARN: ${{ secrets.EKS_ROLE_ARN }}
         EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}              
             
