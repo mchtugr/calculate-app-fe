@@ -81,5 +81,5 @@ jobs:
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
             --values ${{ inputs.values-file}} \
-            --set image.tag=${{ inputs.commit-id }}
+            --set image.tag=${{ inputs.commit-id }} \
             --set ingress.host=${{ steps.ingress.outputs.ingress_host }}
