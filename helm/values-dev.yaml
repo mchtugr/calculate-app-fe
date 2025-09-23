@@ -1,0 +1,26 @@
+replicaCount: 1
+image:
+  repository: 124355662495.dkr.ecr.eu-north-1.amazonaws.com/calculate-app
+  tag: a21067b4d15c499a0482bb65799085b2e53bf1bb
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+ingress:
+  host: a77512d497b4f4a6db6200a98bb28d4f-740708134.eu-north-1.elb.amazonaws.com
+  
+resources:
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
