@@ -45,8 +45,8 @@ jobs:
         env:
           KUBECONFIG: ./kubeconfig
 
-      - run: kubectl get svc --v=8
-        env:
-          KUBECONFIG: ./kubeconfig
+      - run:  |
+            export KUBECONFIG=./kubeconfig
+            kubectl get svc --v=8
 
     
