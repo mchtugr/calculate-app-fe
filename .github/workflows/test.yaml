@@ -44,6 +44,12 @@ jobs:
       - run: cat ./kubeconfig
         env:
           KUBECONFIG: ./kubeconfig
+      
+      - name: Check ConfigMap
+        run: |
+          kubectl get configmap aws-auth -n kube-system -o yaml
+        env:
+          KUBECONFIG: ./kubeconfig    
 
       - run:  |
             export KUBECONFIG=./kubeconfig
