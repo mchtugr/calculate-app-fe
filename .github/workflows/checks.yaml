@@ -60,6 +60,9 @@ jobs:
                 docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
     deploy:
+      needs: push-ecr
+      permissions:
+            id-token: write
       uses: "./.github/workflows/deploy.yaml"
       with:
         commit-id: ${{ github.sha }}
