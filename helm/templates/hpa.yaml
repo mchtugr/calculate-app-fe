@@ -21,7 +21,7 @@ spec:
     {{- end }}
     {{- if .Values.hpa.targetMemoryUtilizationPercentage }}
     - type: Resource
-    resource:
+      resource:
         name: memory
         target:
           type: Utilization
