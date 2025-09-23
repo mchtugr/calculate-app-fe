@@ -59,4 +59,15 @@ jobs:
               run: |
                 docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    deploy:
+      uses: "./.github/workflows/deploy.yaml"
+      with:
+        commit-id: ${{ github.sha }}
+        deployment-name: "calculate-app-fe"
+        chart-file-directory: "./helm"
+        values-file: "./helm/values-dev.yaml"
+      secrets:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+        EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}              
             
