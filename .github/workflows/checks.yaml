@@ -69,6 +69,7 @@ jobs:
         deployment-name: "calculate-app-fe"
         chart-file-directory: "./helm"
         values-file: "./helm/values-dev.yaml"
+        namespace: 'calculate-app'
       secrets:
         EKS_ROLE_ARN: ${{ secrets.EKS_ROLE_ARN }}
         EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}              
