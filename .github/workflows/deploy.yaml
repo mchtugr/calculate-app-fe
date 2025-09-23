@@ -70,6 +70,11 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ${{ inputs.aws-region }} --name ${{ secrets.EKS_CLUSTER_NAME }}
       
+      - name: Get Ingress Hostname
+        id: ingress
+        run: |
+            export INGRESS_HOST=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo "ingress_host=$INGRESS_HOST" >> $GITHUB_OUTPUT 
       - name: Deploy to EKS
         run: |
           helm upgrade --install ${{ inputs.deployment-name }} ${{ inputs.chart-file-directory }} \
@@ -77,3 +82,4 @@ jobs:
             --create-namespace \
             --values ${{ inputs.values-file}} \
             --set image.tag=${{ inputs.commit-id }}
+            --set ingress.host=${{ steps.ingress.outputs.ingress_host }}
