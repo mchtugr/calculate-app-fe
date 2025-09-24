@@ -62,7 +62,7 @@ jobs:
     deploy:
       needs: push-ecr
       permissions:
-            id-token: write
+        id-token: write
       uses: "./.github/workflows/deploy.yaml"
       with:
         commit-id: ${{ github.sha }}
