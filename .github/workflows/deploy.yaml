@@ -74,7 +74,7 @@ jobs:
         id: ingress
         run: |
             export INGRESS_HOST=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            echo "ingress_host=$INGRESS_HOST" >> $GITHUB_OUTPUT 
+            echo "ingress_host=$INGRESS_HOST" >> $GITHUB_OUTPUT
       - name: Deploy to EKS
         run: |
           helm upgrade --install ${{ inputs.deployment-name }} ${{ inputs.chart-file-directory }} \

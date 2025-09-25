@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: 124355662495.dkr.ecr.eu-north-1.amazonaws.com/calculate-app
+  repository: 124355662495.dkr.ecr.eu-north-1.amazonaws.com/calculate-app-fe
   tag: a21067b4d15c499a0482bb65799085b2e53bf1bb
   pullPolicy: IfNotPresent
 service:
