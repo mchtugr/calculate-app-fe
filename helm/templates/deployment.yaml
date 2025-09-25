@@ -19,5 +19,12 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            timeoutSeconds: 5  
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources: 
             {{ toYaml .Values.resources | nindent 12 }}

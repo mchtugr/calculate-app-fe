@@ -58,7 +58,7 @@ function App() {
 
   return (
     <>
-      <h1>Calculate App From CI/CD</h1>
+      <h1>Calculate App From CI/CD Test</h1>
       { !result && <form onSubmit={ onAddNumbers }>
         <div className="input-container">
           <input autoFocus name="first" type="text" value={ numbers.first } onChange={ onInputChange } placeholder="Enter a number" />
