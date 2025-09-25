@@ -15,15 +15,15 @@ spec:
     - {{- if .Values.ingress.host }}
       host: {{ .Values.ingress.host }}
       {{- end }}
-      http:
-        paths:
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.backend.serviceName }}
-                port:
-                  number: 3000
+      # http:
+      #   paths:
+      #     - path: /api
+      #       pathType: Prefix
+      #       backend:
+      #         service:
+      #           name: {{ .Values.backend.serviceName }}
+      #           port:
+      #             number: 3000
           - path: /
             pathType: Prefix
             backend:
