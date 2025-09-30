@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 
-const baseUrl = process.env.REACT_APP_BASE_URL || 'http://calculate-app-backend-service.calculate-app.svc.cluster.local:3000/api';
+const baseUrl = process.env.REACT_APP_BASE_URL || '/api';
 
 function App() {
   const [ numbers, setNumbers ] = useState({
