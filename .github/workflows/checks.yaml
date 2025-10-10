@@ -47,6 +47,8 @@ jobs:
     push-ecr:
       name: Push to ECR
       needs: [vars, checks]
+      permissions:
+        id-token: write
       uses: mchtugr/shared-actions/.github/workflows/push-ecr.yaml@v1
       with:
         image-tag: ${{ github.sha }}
