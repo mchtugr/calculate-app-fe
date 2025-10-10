@@ -1,7 +1,7 @@
 name: Checks
 
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   push:
     branches: [main]
 
@@ -21,69 +21,83 @@ jobs:
         chart_file_directory: ${{ env.CHART_FILE_DIRECTORY }}
         values_file: ${{ env.VALUES_FILE }}
         namespace: ${{ env.NAMESPACE }}
+        aws_region: ${{ env.AWS_REGION }}
       steps:
         - run: echo "Exposing env variables as outputs"
     checks:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup NodeJS
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v5
               with:
-                node-version: 18
+                node-version: 20
 
             - name: Install dependencies
               run: npm install
 
             - name: Check linting
               run: npm run lint
-              
+
             - name: Run tests
               run: npm test
-            
+
     push-ecr:
-        runs-on: ubuntu-latest
-        needs: checks
-        permissions:
-            id-token: write
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-              with:
-                token: ${{ secrets.GITHUB_TOKEN }}
+      name: Push to ECR
+      needs: [vars, checks]
+      uses: mchtugr/shared-actions/.github/workflows/push-ecr.yaml@v1
+      with:
+        image-tag: ${{ github.sha }}
+        ecr-repo: ${{ needs.vars.outputs.deployment_name }}
+        aws-region: ${{ needs.vars.outputs.aws_region }}
+        dry-run: false
+      secrets:
+        AWS_ROLE_ARN: ${{ secrets.EKS_ROLE_ARN }}
 
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-                aws-region: ${{ env.AWS_REGION }}
+        # runs-on: ubuntu-latest
+        # needs: checks
+        # permissions:
+        #     id-token: write
+        # steps:
+        #     - name: Checkout code
+        #       uses: actions/checkout@v3
+        #       with:
+        #         token: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Login to Amazon ECR
-              id: login-ecr
-              uses: aws-actions/amazon-ecr-login@v2
+        #     - name: Configure AWS credentials
+        #       uses: aws-actions/configure-aws-credentials@v4
+        #       with:
+        #         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        #         aws-region: ${{ env.AWS_REGION }}
 
-            - name: Build, tag, and push docker image to Amazon ECR
-              env:
-                REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                REPOSITORY: ${{ env.ECR_REPOSITORY }}
-                IMAGE_TAG: ${{ github.sha }}
-              run: |
-                docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-                docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        #     - name: Login to Amazon ECR
+        #       id: login-ecr
+        #       uses: aws-actions/amazon-ecr-login@v2
+
+        #     - name: Build, tag, and push docker image to Amazon ECR
+        #       env:
+        #         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        #         REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        #         IMAGE_TAG: ${{ github.sha }}
+        #       run: |
+        #         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        #         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
     deploy:
       needs: [vars, push-ecr]
       permissions:
         id-token: write
-      uses: "./.github/workflows/deploy.yaml"
+      uses: "mchtugr/shared-actions/.github/workflows/eks-deploy.yaml@v1"
       with:
         commit-id: ${{ github.sha }}
+        aws-region: ${{ needs.vars.outputs.aws_region}}
         deployment-name: ${{ needs.vars.outputs.deployment_name }}
-        chart-file-directory: ${{ needs.vars.outputs.chart_file_directory }}
-        values-file: ${{ needs.vars.outputs.values_file }}
+        chart-file-path: ${{ needs.vars.outputs.chart_file_directory }}
+        values-file-path: ${{ needs.vars.outputs.values_file }}
         namespace: ${{ needs.vars.outputs.namespace }}
+        dry-run: false
       secrets:
         EKS_ROLE_ARN: ${{ secrets.EKS_ROLE_ARN }}
-        EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}              
-            
+        EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
