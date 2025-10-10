@@ -23,8 +23,8 @@ spec:
             httpGet:
               path: /index.html
               port: 80
-            timeoutSeconds: 10  
-            initialDelaySeconds: 5
+            timeoutSeconds: 30
+            initialDelaySeconds: 30
             periodSeconds: 10
           resources: 
             {{ toYaml .Values.resources | nindent 12 }}
