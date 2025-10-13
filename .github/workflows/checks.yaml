@@ -9,8 +9,8 @@ env:
   AWS_REGION: eu-north-1
   ECR_REPOSITORY: calculate-app-fe
   DEPLOYMENT_NAME: calculate-app-fe
-  CHART_FILE_DIRECTORY: ./helm
-  VALUES_FILE: ./helm/values-dev.yaml
+  CHART_FILE_PATH: ./helm
+  VALUES_FILE_PATH: ./helm/values-dev.yaml
   NAMESPACE: calculate-app
 
 jobs:
@@ -18,8 +18,8 @@ jobs:
       runs-on: ubuntu-latest
       outputs:
         deployment_name: ${{ env.DEPLOYMENT_NAME }}
-        chart_file_directory: ${{ env.CHART_FILE_DIRECTORY }}
-        values_file: ${{ env.VALUES_FILE }}
+        chart_file_path: ${{ env.CHART_FILE_PATH }}
+        values_file_path: ${{ env.VALUES_FILE_PATH }}
         namespace: ${{ env.NAMESPACE }}
         aws_region: ${{ env.AWS_REGION }}
       steps:
@@ -94,10 +94,11 @@ jobs:
       uses: "mchtugr/shared-actions/.github/workflows/eks-deploy.yaml@v1"
       with:
         commit-id: ${{ github.sha }}
+        image-tag: ${{ github.sha }}
         aws-region: ${{ needs.vars.outputs.aws_region}}
         deployment-name: ${{ needs.vars.outputs.deployment_name }}
-        chart-file-path: ${{ needs.vars.outputs.chart_file_directory }}
-        values-file-path: ${{ needs.vars.outputs.values_file }}
+        chart-file-path: ${{ needs.vars.outputs.chart_file_path }}
+        values-file-path: ${{ needs.vars.outputs.values_file_path }}
         namespace: ${{ needs.vars.outputs.namespace }}
         dry-run: false
       secrets:
